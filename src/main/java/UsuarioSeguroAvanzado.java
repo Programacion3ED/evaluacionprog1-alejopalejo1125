@@ -1,4 +1,3 @@
-// Esta es la versión 2
 public class UsuarioSeguroAvanzado {
 
     private String username;
@@ -28,7 +27,6 @@ public class UsuarioSeguroAvanzado {
     public int getMaxIntentos() { return maxIntentos; }
     public boolean isAccesoExitoso() { return accesoExitoso; }
 
-    // === NUEVA LÓGICA AGREGADA EN V2 ===
     public boolean autenticar(String passwordIngresada) {
         if (this.bloqueado) {
             return false;
@@ -51,17 +49,38 @@ public class UsuarioSeguroAvanzado {
         this.intentosFallidos = 0;
         this.bloqueado = false;
     }
-    // ===================================
 
-    // Siguen vacíos para la versión 3
     public boolean cambiarPassword(String actual, String nueva) {
-        return false;
+        if (this.bloqueado) {
+            return false;
+        }
+        if (!this.password.equals(actual)) {
+            return false;
+        }
+        if (!validarPasswordSegura(nueva)) {
+            return false;
+        }
+        this.password = nueva;
+        return true;
     }
 
     public boolean validarPasswordSegura(String nueva) {
-        return false;
+        if (nueva == null || nueva.length() < 8) {
+            return false;
+        }
+
+        boolean tieneMayuscula = false;
+        boolean tieneNumero = false;
+
+        for (int i = 0; i < nueva.length(); i++) {
+            char c = nueva.charAt(i);
+            if (Character.isUpperCase(c)) {
+                tieneMayuscula = true;
+            }
+            if (Character.isDigit(c)) {
+                tieneNumero = true;
+            }
+        }
+        return tieneMayuscula && tieneNumero;
     }
 }
-
-
-
